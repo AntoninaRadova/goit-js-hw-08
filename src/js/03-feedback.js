@@ -1,62 +1,65 @@
-import { throttle } from 'lodash';
-
-// Пошук елементів на сторінці
-const form = document.querySelector('.feedback-form');
-const email = document.querySelector('input[name="email"]');
-const message = document.querySelector('textarea[name="message"]');
-const LOCALSTORAGE_KEY = 'feedback-form-state'; // Ключ для сховища
-
-// Додаємо слухача події input до форми
-form.addEventListener(
-  'input',
-  throttle(e => {
-
-    // Об'єкт з полями email і message, у яких зберігаються поточні значення полів форми
-    const objectToSave = { email: email.value, message: message.value };
-
-    // Записування у локальне сховище об'єкта з полями.
-    // JSON.stringify - конвертування JS-значень у формат строки JSON.
-    localStorage.setItem(LOCALSTORAGE_KEY, JSON.stringify(objectToSave));
-  }, 500) // Оновлення сховища раз на 500 мілісекунд
-);
-
-// Додаємо слухача події submit до форми
-form.addEventListener('submit', e => {
-
-  e.preventDefault(); // відміна оновлення сторінки
-
-  // Перевірка чи заповнені всі поля форми
-  if (email.value === '' || message.value === '') {
-    return alert('Заповніть всі поля!');
-  }
-
-  // Виведення у консоль об'єкта з полями та їхніми поточними значеннями
-  console.log({ email: email.value, message: message.value });
-
-  form.reset(); // очищення поля форми
-  localStorage.removeItem(LOCALSTORAGE_KEY); // очищення сховища
-});
-
-// Метод load який буде абстрагувати повторюваний код перевірки помилок парса
-const load = key => {
-  try {
-    const serializedState = localStorage.getItem(key); // ключ елемента сховища
-
-    // Якщо елемента немає - повернути undefined, інакше розпарсити елемент.
-    return serializedState === null ? undefined : JSON.parse(serializedState);
-  } catch (error) {
-
-    // В разі помилки повернути повідомлення
-    console.error('Get state error: ', error.message);
-  }
-};
-
-// Присвоєння ключа до сховища через метод load
-const storageData = load(LOCALSTORAGE_KEY);
-
-// Перевірка стану сховища.
-// Якщо  в сховищі є збережені дані - заповнити ними поля форми.
-if (storageData) {
-  email.value = storageData.email;
-  message.value = storageData.message;
-}
+export const galleryItems = [
+  {
+    preview:
+      'https://cdn.pixabay.com/photo/2019/05/14/16/43/himilayan-blue-poppy-4202825__340.jpg',
+    original:
+      'https://cdn.pixabay.com/photo/2019/05/14/16/43/himilayan-blue-poppy-4202825_1280.jpg',
+    description: 'Hokkaido Flower',
+  },
+  {
+    preview:
+      'https://cdn.pixabay.com/photo/2019/05/14/22/05/container-4203677__340.jpg',
+    original:
+      'https://cdn.pixabay.com/photo/2019/05/14/22/05/container-4203677_1280.jpg',
+    description: 'Container Haulage Freight',
+  },
+  {
+    preview:
+      'https://cdn.pixabay.com/photo/2019/05/16/09/47/beach-4206785__340.jpg',
+    original:
+      'https://cdn.pixabay.com/photo/2019/05/16/09/47/beach-4206785_1280.jpg',
+    description: 'Aerial Beach View',
+  },
+  {
+    preview:
+      'https://cdn.pixabay.com/photo/2016/11/18/16/19/flowers-1835619__340.jpg',
+    original:
+      'https://cdn.pixabay.com/photo/2016/11/18/16/19/flowers-1835619_1280.jpg',
+    description: 'Flower Blooms',
+  },
+  {
+    preview:
+      'https://cdn.pixabay.com/photo/2018/09/13/10/36/mountains-3674334__340.jpg',
+    original:
+      'https://cdn.pixabay.com/photo/2018/09/13/10/36/mountains-3674334_1280.jpg',
+    description: 'Alpine Mountains',
+  },
+  {
+    preview:
+      'https://cdn.pixabay.com/photo/2019/05/16/23/04/landscape-4208571__340.jpg',
+    original:
+      'https://cdn.pixabay.com/photo/2019/05/16/23/04/landscape-4208571_1280.jpg',
+    description: 'Mountain Lake Sailing',
+  },
+  {
+    preview:
+      'https://cdn.pixabay.com/photo/2019/05/17/09/27/the-alps-4209272__340.jpg',
+    original:
+      'https://cdn.pixabay.com/photo/2019/05/17/09/27/the-alps-4209272_1280.jpg',
+    description: 'Alpine Spring Meadows',
+  },
+  {
+    preview:
+      'https://cdn.pixabay.com/photo/2019/05/16/21/10/landscape-4208255__340.jpg',
+    original:
+      'https://cdn.pixabay.com/photo/2019/05/16/21/10/landscape-4208255_1280.jpg',
+    description: 'Nature Landscape',
+  },
+  {
+    preview:
+      'https://cdn.pixabay.com/photo/2019/05/17/04/35/lighthouse-4208843__340.jpg',
+    original:
+      'https://cdn.pixabay.com/photo/2019/05/17/04/35/lighthouse-4208843_1280.jpg',
+    description: 'Lighthouse Coast Sea',
+  },
+];
