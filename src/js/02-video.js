@@ -1,21 +1,31 @@
 import Player from '@vimeo/player';
-import { throttle } from 'lodash';
+import throttle from 'lodash.throttle'
 
-// Знаходження на сторінці айфрейма 
 const iframe = document.querySelector('iframe');
-
-// Створення екземпляра
 const player = new Player(iframe);
 
-// Відстежування події timeupdate - оновлення часу відтворення
-player.on('timeupdate', throttle(e => {
+player.on('timeupdate', throttle(onTimeupdate, 1000));
 
-  // Збереження часу відтворення у локальне сховище
-  localStorage.setItem('videoplayer-current-time', e.seconds);
-}, 1000) // Час відтворення оновлюється у сховищі не частіше, ніж раз на секунду
-);
+const SECONDS = localStorage.getItem("videoplayer-current-time:");
+console.log(SECONDS);
+player.setCurrentTime(SECONDS).then(function(SECONDS) {
+    // seconds = the actual time that the player seeked to
+    console.log(SECONDS);
+}).catch(function(error) {
+    switch (error.name) {
+        case 'RangeError':
+            console.log(error.message);
+            // the time was less than 0 or greater than the video’s duration
+            break;
 
-// Відновлення відтворення зі збереженої позиції під час перезавантаження сторінки.
-// Якщо пустий localStorage - getItem повертає null. Засетиться 0.
-player
-  .setCurrentTime(localStorage.getItem('videoplayer-current-time') || 0)
+        default:
+            console.log(error.name);
+            // some other error occurred
+            break;
+    }
+});
+
+
+function onTimeupdate(e) {
+        localStorage.setItem("videoplayer-current-time:", e.seconds);
+}
