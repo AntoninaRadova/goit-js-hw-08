@@ -1,44 +1,41 @@
-import { galleryItems } from './gallery-items';
-import SimpleLightbox from 'simplelightbox';
+import SimpleLightbox from "simplelightbox";
 import 'simplelightbox/dist/simple-lightbox.min.css';
 
-// пошук галереї на сторінці
-const gallery = document.querySelector(".gallery");
+// Add imports above this line
+import { galleryItems } from './gallery-items';
+// Change code below this line
 
-// створення пустого масиву для додавання елементів
-const items = [];
+console.log(galleryItems);
 
-// перебирання масиву об'єктів з файлу './gallery-items.js'
-galleryItems.forEach((element) => {
+const galleryEl = document.querySelector('.gallery');
 
-  // створення тегу посилання
-  const galleryLink = document.createElement("a");
-  galleryLink.classList.add("gallery__link"); // додавання класу до посилання
-  galleryLink.href = element.original; // присвоєння посилання на фото з властивості об'єкта
+const makeGalleryMarkup = (galleryItems) => {
+    return galleryItems.map(({preview, original, description}) => {
+        return `<div class='gallery__item'>
+        <a class="gallery__link" href="${original}">
+            <img 
+            class="gallery__image"
+            src="${preview}"
+            data-source="${original}"
+            alt="${description}"
+            />
+        </a>
+        </div>`
+    }).join("");
+}
 
-  // створення тегу зображення
-  const galleryImage = document.createElement("img");
+const galleryMarkup = makeGalleryMarkup(galleryItems);
+console.log(galleryMarkup);
 
-  // додавання класу до зображення
-  galleryImage.classList.add("gallery__image");
+galleryEl.innerHTML = galleryMarkup;
 
-  // додавання малого зображення з властивості об'єкта './gallery-items.js'
-  galleryImage.src = element.preview; // присвоєння малого зображення
+galleryEl.addEventListener('click', onGalleryClick);
 
-  // додавання атрибуту title з властивості об'єкта './gallery-items.js'
-  galleryImage.setAttribute("title", element.description);
-
-  // додавання тексту для alt з властивості об'єкта './gallery-items.js'
-  galleryImage.alt = element.description;
-
-  galleryLink.append(galleryImage); // вставлення зображення в посилання
-  items.push(galleryLink); // вставлення посилання в масив елементів
+let gallery = new SimpleLightbox('.gallery a', {
+    captionsData: 'alt',
+    captionsDelay: 250,
 });
 
-// додавання створених елементів до галереї через розпилення
-gallery.append(...items);
-
-// додавання затримки для опису зображення
-new SimpleLightbox(".gallery a", {
-  captionDelay: 250,
-});
+function onGalleryClick(e) {
+    e.preventDefault();
+}
