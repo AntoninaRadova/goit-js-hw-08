@@ -6,7 +6,7 @@ const player = new Player(iframe);
 
 player.on('timeupdate', throttle(onTimeupdate, 1000));
 
-const SECONDS = localStorage.getItem("videoplayer-current-time:");
+const SECONDS = localStorage.getItem("videoplayer-current-time");
 player.setCurrentTime(SECONDS).catch(function(error) {
     switch (error.name) {
         case 'RangeError':
