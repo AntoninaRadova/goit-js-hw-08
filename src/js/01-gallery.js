@@ -5,8 +5,6 @@ import 'simplelightbox/dist/simple-lightbox.min.css';
 import { galleryItems } from './gallery-items';
 // Change code below this line
 
-console.log(galleryItems);
-
 const galleryEl = document.querySelector('.gallery');
 
 const makeGalleryMarkup = (galleryItems) => {
@@ -29,13 +27,7 @@ console.log(galleryMarkup);
 
 galleryEl.innerHTML = galleryMarkup;
 
-galleryEl.addEventListener('click', onGalleryClick);
-
-let gallery = new SimpleLightbox('.gallery a', {
+new SimpleLightbox('.gallery a', {
     captionsData: 'alt',
     captionsDelay: 250,
 });
-
-function onGalleryClick(e) {
-    e.preventDefault();
-}
